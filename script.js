@@ -91,13 +91,15 @@ class Firework {
 }
 
 let fireworks = [];
+let isCelebrating = false;
 
 function animate() {
     ctx.fillStyle = 'rgba(5, 5, 16, 0.2)'; // Trail effect
     ctx.fillRect(0, 0, width, height);
 
-    // Random fireworks
-    if (Math.random() < 0.05) {
+    // Random fireworks - Intense mode if celebrating
+    let chance = isCelebrating ? 0.2 : 0.05;
+    if (Math.random() < chance) {
         fireworks.push(new Firework());
     }
 
@@ -120,16 +122,19 @@ function animate() {
 
 // Button interaction
 celebrateBtn.addEventListener('click', (e) => {
+    isCelebrating = true;
+    document.body.classList.add('celebrate-mode');
+
     // Blast fireworks from center
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 15; i++) {
         setTimeout(() => {
             const f = new Firework();
             f.x = width / 2;
             f.y = height;
-            f.targetY = height * 0.3 + Math.random() * 100;
+            f.targetY = height * 0.2 + Math.random() * 300;
             f.hue = Math.random() * 360;
             fireworks.push(f);
-        }, i * 200);
+        }, i * 50);
     }
 
     // Confetti burst from button
@@ -137,7 +142,7 @@ celebrateBtn.addEventListener('click', (e) => {
     const bx = rectal.left + rectal.width / 2;
     const by = rectal.top + rectal.height / 2;
 
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < 100; i++) {
         particles.push(new Particle(bx, by, `hsl(${Math.random() * 360}, 100%, 60%)`));
     }
 });
